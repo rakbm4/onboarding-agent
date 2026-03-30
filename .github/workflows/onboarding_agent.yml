@@ -1,0 +1,41 @@
+name: 🤖 Onboarding AI Agent
+
+on:
+  schedule:
+    - cron: "0 8 * * 1-5"    # 1:30 PM IST (UTC+5:30), Monday–Friday only
+  workflow_dispatch:           # Allows manual trigger from GitHub Actions UI
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js 20 (required by Claude Agent SDK)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Onboarding Agent
+        env:
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          SLACK_BOT_TOKEN:     ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_LOG_CHANNEL:   ${{ secrets.SLACK_LOG_CHANNEL }}
+          GOOGLE_SHEET_ID:     ${{ secrets.GOOGLE_SHEET_ID }}
+          JOINERS_SHEET_GID:   ${{ secrets.JOINERS_SHEET_GID }}
+          HOLIDAYS_SHEET_GID:  ${{ secrets.HOLIDAYS_SHEET_GID }}
+          DOCS_SHEET_GID:      ${{ secrets.DOCS_SHEET_GID }}
+        run: python agent.py
