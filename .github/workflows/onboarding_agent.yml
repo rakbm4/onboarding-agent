@@ -1,6 +1,9 @@
 name: 🤖 Onboarding AI Agent
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: "* * * * *"
   workflow_dispatch:
