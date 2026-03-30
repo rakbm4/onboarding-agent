@@ -3,7 +3,8 @@ name: 🤖 Onboarding AI Agent
 on:
   schedule:
     # - cron: "0 8 * * 1-5"    # 1:30 PM IST (UTC+5:30), Monday–Friday only
-    - cron: "*/5 * * * *"
+    # - cron: "*/5 * * * *"    #runs every 5 minutes
+      - cron: "* * * * *" # trigger cron refresh
   workflow_dispatch:           # Allows manual trigger from GitHub Actions UI
 
 jobs:
